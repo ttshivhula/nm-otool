@@ -207,7 +207,9 @@ int		map_file(char *filename, unsigned char **content,
 	fstat(fd, &info);
 	*size = info.st_size;
 	*content = mmap(0, *size, PROT_READ, MAP_PRIVATE, fd, 0);
-	return (1);
+	if (*content != NULL)
+		return (1);
+	return (0);
 }
 
 int		main(int argc, char **argv)
@@ -219,8 +221,8 @@ int		main(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		map_file(argv[i], &content, &size);
-		run_otool(argv[i], content, size);
+		if (map_file(argv[i], &content, &size))
+			run_otool(argv[i], content, size);
 		i++;
 	}
 	return (0);
