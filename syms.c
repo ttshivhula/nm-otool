@@ -56,7 +56,7 @@ static int print_symbols(void* map, size_t filesize) {
 			fprintf(stderr, "Load command too small!\n");
 			return -1;
 		}
-		
+	printf("size: %d\n", cmd->cmdsize);	
 		/* Make sure the load command is completely contained in the file */
 		if((uintptr_t)cmd + cmd->cmdsize - (uintptr_t)mh > filesize) {
 			fprintf(stderr, "Load command truncated!\n");

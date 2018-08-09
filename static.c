@@ -6,7 +6,7 @@
 /*   By:  <>                                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 15:05:36 by                   #+#    #+#             */
-/*   Updated: 2018/08/08 15:41:04 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/09 16:54:33 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,27 +35,58 @@ int		map_file(char *filename, unsigned char **content,
 	return (0);
 }
 
+void		sections(struct segment_command_64 *seg, int n)
+{
+
+	int i = 0;
+	while (i < n)
+	{
+		printf("segment name: %s\n", seg->segname);
+		seg = (struct segment_command_64 *)((char *)seg + seg->cmdsize);
+		i++;
+	}
+}
 void		static_otool(char *filen, unsigned char *addr, size_t size)
 {
 	struct fat_header *fat;
 	struct mach_header_64 *header;
-	struct segment_command *seg;
-    char    *segd;
+	struct load_command *load;
+	struct symtab_command *sym;
+	struct segment_command_64 * seg = NULL;
 
 	header = (struct mach_header_64 *)addr;
-	if (header->magic == MH_MAGIC_64)
-		printf("no: %d\n", header->ncmds);
-	seg = addr + (sizeof(struct mach_header_64 *) + sizeof(struct segment_command *));
-	printf("segment: %d\n", seg->cmdsize);
-    segd = addr + seg->fileoff;
-    int i = 0;
-    while (i < 100)
-    {
-        if (strcmp(segd, "__text") == 0)
-            printf("found\n");
-        segd++;
-        i++;
-    }
+	load = (struct load_command *)&header[1];
+	int i = 0;
+	while (i < header->ncmds)
+	{
+		if (load->cmd == LC_SYMTAB)
+		{
+			sym = (struct symtab_command *)load;
+		}
+		if (load->cmd == LC_SEGMENT_64 && !seg)
+		{
+			//printf("lc seg found\n");
+			seg = (struct segment_command_64 *)load;
+			sections(seg, seg->nsects);
+			//break ;
+		}
+		i++;
+		load = (struct load_command*) ((char*)load + load->cmdsize);
+	}
+	struct nlist_64 *symtab = (struct nlist_64 *)((char *)addr + sym->symoff);
+	i = 0;
+	char	*names = (char *)addr + sym->stroff;
+	while (i < sym->nsyms)
+	{
+		struct nlist_64 *nl =(struct nlist_64 *)&symtab[i];
+		char	*symname = &names[nl->n_un.n_strx];
+		if (!(nl->n_type & N_STAB))
+		{
+			printf("s:   %s sect: %d type: %d val: %llx\n", symname,
+			       nl->n_sect, nl->n_type & N_EXT, nl->n_value);
+		}
+		i++;
+	}
 }
 
 int		main(int argc, char **argv)
