@@ -6,7 +6,7 @@
 /*   By:  <>                                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 15:05:36 by                   #+#    #+#             */
-/*   Updated: 2018/08/09 16:54:33 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/09 17:14:31 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,22 @@ int		map_file(char *filename, unsigned char **content,
 		return (1);
 	return (0);
 }
+/*
+ * TODO: identify all the sections
+*/
 
 void		sections(struct segment_command_64 *seg, int n)
 {
 
+	struct section_64 *sect;
+
+	sect = (struct section_64 *)seg;
 	int i = 0;
+	printf("no segs: %d\n", n);
 	while (i < n)
 	{
-		printf("segment name: %s\n", seg->segname);
-		seg = (struct segment_command_64 *)((char *)seg + seg->cmdsize);
+		printf("segment name: %s\n", sect->sectname);
+		sect = (struct section_64 *)((char *)sect + sect->size);
 		i++;
 	}
 }
