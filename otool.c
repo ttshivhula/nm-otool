@@ -5,6 +5,7 @@
 #include <sys/mman.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "libft/libft.h"
 
 int					len_base(long long nb, int base)
 {
@@ -70,7 +71,7 @@ void		print_first_part(unsigned long long addr, int start)
 	if (!start)
 		write(1, "\n", 1);
 	str = ft_itoa_base(addr, 16);
-	len = strlen(str);
+	len = ft_strlen(str);
 	i = 0;
 	while (i < 16 - len)
 	{
@@ -160,7 +161,7 @@ void		find_text_section_32(struct mach_header *head,
 	file = (unsigned char *)&head[1];
 	while (42)
 	{
-		if (strcmp((const char*)file, "__text") == 0)
+		if (ft_strcmp((const char*)file, "__text") == 0)
 		{
 			sect = (struct section *)file;
 			break ;
@@ -187,7 +188,7 @@ void		run_otool(char *fname, unsigned char *content, size_t size)
 	struct mach_header	*header;
 	int			is_32;
 
-	write(1, fname, strlen(fname));
+	write(1, fname, ft_strlen(fname));
 	write(1, ":", 1);
 	header = (struct mach_header *)content;
 	is_32 = is_32_or_64(header);
