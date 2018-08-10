@@ -1,108 +1,127 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   nm.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/08/10 14:31:11 by ttshivhu          #+#    #+#             */
+/*   Updated: 2018/08/10 15:42:23 by ttshivhu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "theader.h"
 
-#include <mach-o/nlist.h>
-#include <mach-o/loader.h>
-#include <mach-o/stab.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <fcntl.h>
-#include <unistd.h>
+/*
+ * TODO: 1 represent ranlib, 2 - 64bit header 3 - 32 bit, 0 for ever other
+ * crap
+ */
 
-int		is_32_or_64(struct mach_header *head)
+int		part_type(unsigned char *addr)
 {
-	if (head->magic == MH_MAGIC_64)
+	struct mach_header_64	*h64;
+	struct mach_header	*h32;
+
+	if (!ft_strncmp((char *)addr, ARMAG, SARMAG))
 		return (1);
+	h64 = (struct mach_header_64 *)addr;
+	h32 = (struct mach_header *)addr;
+	if (h64->magic == MH_MAGIC_64 || h64->magic == MH_CIGAM_64)
+		return (2);
+	if (h32->magic == MH_MAGIC || h32->magic == MH_CIGAM)
+		return (3);
 	return (0);
 }
 
-struct symtab_command		*segment_search(struct mach_header_64 *header,
-		int ncmds, struct load_command *comm)
+void		sect_64(t_sections **head, struct segment_command_64 *seg, int n)
 {
-	struct symtab_command	*sym;
-	int			i;
 
-	i = 0;
-	while (i < ncmds)
+	struct section_64 *sect;
+	static int j = 1;
+
+	sect = (struct section_64 *)&seg[1];
+	int i = 0;
+	while (i < n)
 	{
-		if (comm->cmd == LC_SYMTAB)
-		{
-			sym = (struct symtab_command *)comm;
-			break ;
-		}
-		comm = (struct load_command *)((void*)comm +
-			comm->cmdsize);
+		add_sect(head, sect->sectname, sect->segname);
+		sect = (struct section_64 *)((char *)sect +
+					     sizeof(struct section_64));
 		i++;
 	}
-	return (sym);
 }
-
-void		print_labels(struct symtab_command *sym,
-			unsigned char *content)
+void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
+			 int nsyms)
 {
-	struct nlist_64 *info;
+	char		*symname;
+	struct nlist_64	*nl;
 	int		i;
-	struct nlist_64 *another;
-	char		*name;
 
-	name = (char *)content + sym->stroff;
-	info = (struct nlist_64 *)((void *)info + sym->symoff);
-	i = 0;
-	while (i < sym->nsyms)
+	i = -1;
+	while (++i < nsyms)
 	{
-		another = &info[i];
-		printf("%s :", &name[another->n_un.n_strx]);
-		if (info->n_type & N_SECT)
-			printf(" T ");
-		printf("%x\n ", another->n_value);
-		i++;
+		nl = (struct nlist_64 *)&symtab[i];
+		symname = &names[nl->n_un.n_strx];
+		if (!(nl->n_type & N_STAB))
+		{
+			ft_puthexa(nl->n_value, 16);
+			ft_putchar(' ');
+			print_symbol(s, nl->n_sect, nl->n_type);
+			ft_putchar(' ');
+			ft_putendl(symname);
+		}
 	}
 }
 
-void		nm64(struct mach_header *head, unsigned char *content)
+void		nm_64(char *fname, unsigned char *addr)
 {
-	struct mach_header_64 *head64;
-	struct load_command *stuff;
-	int			delim;
-	struct symtab_command *sym;
+	struct mach_header_64		*header;
+	struct load_command		*load;
+	struct symtab_command		*sym;
+	struct segment_command_64	*seg = NULL;
+	struct nlist_64			*symtab;
+	t_sections			*shead = NULL;
+	char				*names;
+	int				i;
 
-	head64 = (struct mach_header_64 *)head;
-	stuff = (struct load_command *)&head64[1];
-	delim = head64->ncmds;
-	sym = segment_search(head64, delim, stuff);
-	print_labels(sym, content);
-
+	header = (struct mach_header_64 *)addr;
+	load = (struct load_command *)&header[1];
+	i = 0;
+	while (i < header->ncmds)
+	{
+		if (load->cmd == LC_SYMTAB)
+		{
+			sym = (struct symtab_command *)load;
+		}
+		if (load->cmd == LC_SEGMENT_64)
+		{
+			seg = (struct segment_command_64 *)load;
+			sect_64(&shead, seg, seg->nsects);
+		}
+		i++;
+		load = (struct load_command*) ((char*)load + load->cmdsize);
+	}
+	symtab = (struct nlist_64 *)((char *)addr + sym->symoff);
+	i = 0;
+	names = (char *)addr + sym->stroff;
+	print_64(shead, symtab, names, sym->nsyms);
 }
 
-
-void		nm32(struct mach_header *head)
+void		nm(char *fn, unsigned char *addr, int size)
 {
-	return ;
-}
+	t_ranlibs *ranlibs;
 
-void		run_otool(unsigned char *content, size_t size)
-{
-	struct mach_header	*header;
-	int			is_32;
-
-	header = (struct mach_header *)content;
-	is_32 = is_32_or_64(header);
-	if (is_32 == 1)
-		nm64(header, content);
+	ranlibs = NULL;
+	if (part_type(addr) == 1)
+		add_ranlib(fn, addr, size);
+	else if (part_type(addr) == 2)
+		nm_64(fn, addr);
+	else if (part_type(addr) == 3)
+		nm_32(fn, addr);
 	else
-		nm32(header);
-}
-
-int		map_file(char *filename, unsigned char **content,
-			 size_t *size)
-{
-	int		fd;
-	struct stat	info;
-
-	fd = open(filename, O_RDONLY);
-	fstat(fd, &info);
-	*size = info.st_size;
-	*content = mmap(0, *size, PROT_READ, MAP_PRIVATE, fd, 0);
-	return (1);
+	{
+		ft_putstr(fn);
+		ft_putendl(" The file was not recognized as a valid object file");
+	}
 }
 
 int		main(int argc, char **argv)
@@ -114,9 +133,10 @@ int		main(int argc, char **argv)
 	i = 1;
 	while (i < argc)
 	{
-		map_file(argv[i], &content, &size);
-		run_otool(content, size);
+		if (map_file(argv[i], &content, &size))
+			nm(argv[i], content, size);
 		i++;
 	}
+	(void *)size;
 	return (0);
 }

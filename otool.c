@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include "libft/libft.h"
 
+/*
 int					len_base(long long nb, int base)
 {
 	int				len;
@@ -53,7 +54,7 @@ char				*ft_itoa_base(long long n, int base)
 		n /= base;
 	}
 	return (ret);
-}
+}*/
 
 int		is_32_or_64(struct mach_header *head)
 {

@@ -6,7 +6,7 @@
 /*   By:  <>                                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 15:05:36 by                   #+#    #+#             */
-/*   Updated: 2018/08/10 14:10:59 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/10 14:23:31 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 #include <mach-o/fat.h>
 #include "libft/libft.h"
 
-typedef		struct s_sections
+/*typedef		struct s_sections
 {
 	char	*sectname;
 	char	*segname;
@@ -66,7 +66,7 @@ int		map_file(char *filename, unsigned char **content,
 	if (*content != NULL)
 		return (1);
 	return (0);
-}
+}*/
 
 void		sections(t_sections **head, struct segment_command_64 *seg, int n)
 {
@@ -84,7 +84,7 @@ void		sections(t_sections **head, struct segment_command_64 *seg, int n)
 	}
 }
 
-char	sect_char(char *sect, char *seg, int n_type)
+/*char	sect_char(char *sect, char *seg, int n_type)
 {
 	char	c;
 	if (!strcmp(sect, "__common") && !strcmp(seg, "__DATA"))
@@ -160,7 +160,7 @@ void		print_sectsym(t_sections * head, int index, int n_type)
 		c = 'i';
 	c = c ? c : 'u';
 	ft_putchar((n_type & N_EXT) ? c - 32 : c);
-}
+}*/
 
 void		static_nm(char *filen, unsigned char *addr, size_t size)
 {
