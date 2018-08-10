@@ -6,7 +6,7 @@
 /*   By:  <>                                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/08 15:05:36 by                   #+#    #+#             */
-/*   Updated: 2018/08/10 11:06:37 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/10 14:10:59 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,12 +149,6 @@ void		print_sectsym(t_sections * head, int index, int n_type)
 		{
 			c = sect_char(current->sectname, current->segname, n_type);
 			ft_putchar(c);
-			//ft_putchar(' ');
-			//ft_putstr(current->sectname);
-			//ft_putchar('-');
-			//ft_putstr(current->segname);
-			//ft_putnbr(ext);
-			//ft_putchar(' ');
 			return ;
 		}
 		current = current->next;
@@ -162,6 +156,8 @@ void		print_sectsym(t_sections * head, int index, int n_type)
 	}
 	if (n_type & N_ABS)
 		c = 'a';
+	if (n_type & N_INDR)
+		c = 'i';
 	c = c ? c : 'u';
 	ft_putchar((n_type & N_EXT) ? c - 32 : c);
 }
