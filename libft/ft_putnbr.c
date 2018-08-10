@@ -1,25 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnchar.c                                      :+:      :+:    :+:   */
+/*   ft_putnbr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ttshivhu <marvin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/08/03 11:05:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/08/03 11:07:04 by ttshivhu         ###   ########.fr       */
+/*   Created: 2017/05/24 19:01:22 by ttshivhu          #+#    #+#             */
+/*   Updated: 2017/05/29 12:12:04 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnchar(char c, int n)
+void	ft_putnbr(int n)
 {
-	int i;
-
-	i = 0;
-	while (i < n)
-	{
-		write(1, &c, 1);
-		i++;
-	}
+	ft_putnbr_fd(n, 1);
 }

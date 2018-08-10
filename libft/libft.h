@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/22 17:34:43 by ttshivhu          #+#    #+#             */
-/*   Updated: 2017/08/13 11:47:55 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2017/06/08 10:40:10 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-int					ft_putwchar(wchar_t wc);
-char				*ft_itoa_base(long long n, int base);
-char				*ft_itoa_base_cap(long long n, int base);
-void				ft_putnchar(char c, int n);
 void				*ft_memset(void *s, int c, size_t n);
 void				ft_bzero(void *s, size_t n);
 void				*ft_memcpy(void *dest, const void *src, size_t n);
@@ -58,8 +54,8 @@ char				*ft_strchr(const char *haystack, int c);
 char				*ft_strrchr(const char *haystack, int c);
 void				ft_putchar(char c);
 void				ft_putchar_fd(char c, int fd);
-void				ft_putnbr_fd(long long n, int fd);
-void				ft_putnbr(long long n);
+void				ft_putnbr_fd(int n, int fd);
+void				ft_putnbr(int n);
 void				ft_putendl_fd(char const *s, int fd);
 void				ft_putendl(char const *s);
 void				ft_putstr_fd(char const *s, int fd);
