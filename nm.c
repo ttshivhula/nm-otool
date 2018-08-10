@@ -6,32 +6,11 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:31:11 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 15:42:23 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/10 16:37:43 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
-
-/*
- * TODO: 1 represent ranlib, 2 - 64bit header 3 - 32 bit, 0 for ever other
- * crap
- */
-
-int		part_type(unsigned char *addr)
-{
-	struct mach_header_64	*h64;
-	struct mach_header	*h32;
-
-	if (!ft_strncmp((char *)addr, ARMAG, SARMAG))
-		return (1);
-	h64 = (struct mach_header_64 *)addr;
-	h32 = (struct mach_header *)addr;
-	if (h64->magic == MH_MAGIC_64 || h64->magic == MH_CIGAM_64)
-		return (2);
-	if (h32->magic == MH_MAGIC || h32->magic == MH_CIGAM)
-		return (3);
-	return (0);
-}
 
 void		sect_64(t_sections **head, struct segment_command_64 *seg, int n)
 {
@@ -55,6 +34,7 @@ void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
 	char		*symname;
 	struct nlist_64	*nl;
 	int		i;
+	char		c;
 
 	i = -1;
 	while (++i < nsyms)
@@ -63,9 +43,10 @@ void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
 		symname = &names[nl->n_un.n_strx];
 		if (!(nl->n_type & N_STAB))
 		{
-			ft_puthexa(nl->n_value, 16);
+			c = get_symbol(s, nl->n_sect, nl->n_type);
+			padding(nl->n_value, c, 16);
 			ft_putchar(' ');
-			print_symbol(s, nl->n_sect, nl->n_type);
+			ft_putchar(c);
 			ft_putchar(' ');
 			ft_putendl(symname);
 		}
@@ -112,7 +93,7 @@ void		nm(char *fn, unsigned char *addr, int size)
 
 	ranlibs = NULL;
 	if (part_type(addr) == 1)
-		add_ranlib(fn, addr, size);
+		add_ranlib(fn, addr, size, 1);
 	else if (part_type(addr) == 2)
 		nm_64(fn, addr);
 	else if (part_type(addr) == 3)
@@ -131,12 +112,12 @@ int		main(int argc, char **argv)
 	size_t			size;
 
 	i = 1;
+	content = NULL;
 	while (i < argc)
 	{
 		if (map_file(argv[i], &content, &size))
 			nm(argv[i], content, size);
 		i++;
 	}
-	(void *)size;
 	return (0);
 }

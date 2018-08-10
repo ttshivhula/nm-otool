@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 15:13:35 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 15:47:47 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/10 16:20:55 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,14 @@ void		sect(t_sections **head, struct segment_command *seg, int n)
 		i++;
 	}
 }
+
 void		print_32(t_sections *s, struct nlist *symtab, char *names,
 			 int nsyms)
 {
 	char		*symname;
 	struct nlist	*nl;
 	int		i;
+	char		c;
 
 	i = -1;
 	while (++i < nsyms)
@@ -43,9 +45,10 @@ void		print_32(t_sections *s, struct nlist *symtab, char *names,
 		symname = &names[nl->n_un.n_strx];
 		if (!(nl->n_type & N_STAB))
 		{
-			ft_puthexa((long)nl->n_value, 8);
+			c = get_symbol(s, nl->n_sect, nl->n_type);
+			padding(nl->n_value, c, 8);
 			ft_putchar(' ');
-			print_symbol(s, nl->n_sect, nl->n_type);
+			ft_putchar(c);
 			ft_putchar(' ');
 			ft_putendl(symname);
 		}

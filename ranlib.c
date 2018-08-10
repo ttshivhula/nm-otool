@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:17:18 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 15:42:51 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/10 16:36:30 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ unsigned char	*ranlib_frame(void *ptr)
 	return (&file[i]);
 }
 
-void		run_ranlibs(char *fn, t_ranlibs * head, int size)
+void		run_nm(char *fn, t_ranlibs * head, int size)
 {
 	t_ranlibs	*current;
 	unsigned char	*tmp;
@@ -66,11 +66,13 @@ void		run_ranlibs(char *fn, t_ranlibs * head, int size)
 		ft_putstr(current->ptr);
 		ft_putendl("):");
 		nm(fn, tmp, size);
+		if (current->next)
+			ft_putchar('\n');
 		current = current->next;
 	}
 }
 
-void		add_ranlib(char *fn, unsigned char *ptr, int size)
+void		add_ranlib(char *fn, unsigned char *ptr, int size, int prog)
 {
 	t_ranlibs	*head;
 	int		i;
@@ -86,5 +88,6 @@ void		add_ranlib(char *fn, unsigned char *ptr, int size)
 		}
 		i++;
 	}
-	run_ranlibs(fn, head, size);
+	if (prog)
+		run_nm(fn, head, size);
 }

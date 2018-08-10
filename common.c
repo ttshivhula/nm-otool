@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:18:12 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 15:47:39 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/10 16:27:57 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,12 @@ int		map_file(char *filename, unsigned char **content,
 	struct stat	info;
 
 	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		ft_putstr(filename);
+		ft_putendl(" No such file or directory.");
+		return (0);
+	}
 	fstat(fd, &info);
 	*size = info.st_size;
 	*content = mmap(0, *size, PROT_READ, MAP_PRIVATE, fd, 0);
@@ -100,7 +106,7 @@ void	ft_puthexa(long long nb, int bits)
 	}
 }
 
-void		print_symbol(t_sections * head, int index, int n_type)
+char	get_symbol(t_sections * head, int index, int n_type)
 {
 	t_sections	*current;
 	char		c;
@@ -114,8 +120,7 @@ void		print_symbol(t_sections * head, int index, int n_type)
 		if (i == index)
 		{
 			c = sect_char(current->sectname, current->segname, n_type);
-			ft_putchar(c);
-			return ;
+			return (c);
 		}
 		current = current->next;
 		i++;
@@ -125,5 +130,5 @@ void		print_symbol(t_sections * head, int index, int n_type)
 	if (n_type & N_INDR)
 		c = 'i';
 	c = c ? c : 'u';
-	ft_putchar((n_type & N_EXT) ? c - 32 : c);
+	return ((n_type & N_EXT) ? c - 32 : c);
 }
