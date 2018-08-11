@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:27:57 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 15:18:22 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 17:51:59 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,19 @@ int			part_type(unsigned char *addr, int size, int *offset)
 {
 	struct mach_header_64	*h64;
 	struct mach_header		*h32;
-	int						i;
 
-	i = -1;
-	*offset = 0;
-	while (++i < size)
+	*offset = -1;
+	while (++(*offset) < size)
 	{
 		if (!ft_strncmp((char *)addr, ARMAG, SARMAG))
-		{
-			*offset = i;
 			return (1);
-		}
 		h64 = (struct mach_header_64 *)addr;
 		h32 = (struct mach_header *)addr;
 		if (h64->magic == MH_MAGIC_64 || h64->magic == MH_CIGAM_64)
-		{
-			*offset = i;
 			return (2);
-		}
-		if ((h32->magic == MH_MAGIC || h32->magic == MH_CIGAM) && !i)
-		{
-			*offset = i;
+		if ((h32->magic == MH_MAGIC || h32->magic == MH_CIGAM) &&
+		    !*offset)
 			return (3);
-		}
 		addr++;
 	}
 	return (0);
