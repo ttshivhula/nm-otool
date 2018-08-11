@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:27:57 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 12:59:17 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 13:04:39 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ int			map_file(char *filename, unsigned char **content,
 	struct stat	info;
 
 	fd = open(filename, O_RDONLY);
-	if (fd == -1)
+	fstat(fd, &info);
+	if (fd == -1 || S_ISDIR(info.st_mode))
 	{
 		ft_putstr(filename);
 		ft_putendl(" No such file or directory.");
 		return (0);
 	}
-	fstat(fd, &info);
 	*size = info.st_size;
 	*content = mmap(0, *size, PROT_READ, MAP_PRIVATE, fd, 0);
 	if (*content != NULL)
