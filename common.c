@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:18:12 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:40:49 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 12:02:05 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ char	sect_char(char *sect, char *seg, int n_type)
 {
 	char	c;
 
+	(void)seg;
 	if (!strcmp(sect, "__text"))
 		c = 't';
 	else if (!strcmp(sect, "__bss"))

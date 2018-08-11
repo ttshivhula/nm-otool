@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:17:18 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 11:23:14 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 12:02:41 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	run_nm(char *fn, t_ranlibs *head, int size)
 {
 	t_ranlibs		*current;
 	unsigned char	*tmp;
-	char			*name;
 
 	current = head;
 	while (current != NULL)
@@ -76,7 +75,6 @@ void	run_otool(char *fn, t_ranlibs *head, int size)
 {
 	t_ranlibs		*current;
 	unsigned char	*tmp;
-	char			*name;
 
 	current = head;
 	while (current != NULL)

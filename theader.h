@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:13:32 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 11:22:20 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 12:01:30 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void							ft_putnchar(char c, int n);
 void							ft_puthexa(long long nb, int bits);
 char							get_symbol(t_sections *head, int index,
 		int addr, int n_type);
-void							nm_32(char *fname, unsigned char *addr);
+void							nm_32(unsigned char *addr);
 void							nm(char *fn, unsigned char *addr, int size);
 void							otool(char *fn, unsigned char *addr, int size);
 int								part_type(unsigned char *addr);

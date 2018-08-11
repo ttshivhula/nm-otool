@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:39:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 11:11:13 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 12:03:09 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void		print_other_hex(unsigned long long addr, int zero, int bits)
 	write(1, str, strlen(str));
 	(str) ? free(str) : 0;
 	write(1, " ", 1);
+	(void)bits;
 }
 
 void		print_section(size_t addr, size_t size, unsigned char *content,

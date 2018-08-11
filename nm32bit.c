@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 15:13:35 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 11:24:50 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 12:00:45 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		print_32(t_sections *s, struct nlist *symtab, char *names,
 	free_sections(s);
 }
 
-void		nm_32(char *fname, unsigned char *addr)
+void		nm_32(unsigned char *addr)
 {
 	t_structs		ts;
 	int				i;
@@ -63,7 +63,7 @@ void		nm_32(char *fname, unsigned char *addr)
 	ts.header = (struct mach_header *)addr;
 	ts.load = (struct load_command *)&ts.header[1];
 	i = 0;
-	while (i < ts.header->ncmds)
+	while (i < (int)ts.header->ncmds)
 	{
 		if (ts.load->cmd == LC_SYMTAB)
 		{
