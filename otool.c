@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:39:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 12:03:09 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 12:33:53 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void		print_section(size_t addr, size_t size, unsigned char *content,
 
 	val = addr;
 	is_16 = 0;
-	write(1, "Contents of (__TEXT,__text) section\n", 37);
+	ft_putendl("Contents of (__TEXT,__text) section");
 	print_first_part(val, 1, bits);
 	i = -1;
 	while (++i < size)
