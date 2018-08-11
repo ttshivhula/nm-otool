@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:50:58 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 09:51:38 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:49:08 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int		main(int argc, char **argv)
 {
-	int	i;
+	int				i;
 	unsigned char	*content;
 	size_t			size;
 

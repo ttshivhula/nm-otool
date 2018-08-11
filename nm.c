@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:31:11 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 09:58:18 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 11:15:52 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,27 @@
 
 void		sect_64(t_sections **head, struct segment_command_64 *seg, int n)
 {
-
-	struct section_64 *sect;
-	static int j = 1;
+	struct section_64	*sect;
+	int					i;
 
 	sect = (struct section_64 *)&seg[1];
-	int i = 0;
+	i = 0;
 	while (i < n)
 	{
 		add_sect(head, sect->sectname, sect->segname);
 		sect = (struct section_64 *)((char *)sect +
-					     sizeof(struct section_64));
+				sizeof(struct section_64));
 		i++;
 	}
 }
+
 void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
-			 int nsyms)
+		int nsyms)
 {
-	char		*symname;
+	char			*symname;
 	struct nlist_64	*nl;
-	int		i;
-	char		c;
+	int				i;
+	char			c;
 
 	i = -1;
 	while (++i < nsyms)
@@ -43,7 +43,7 @@ void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
 		symname = &names[nl->n_un.n_strx];
 		if (!(nl->n_type & N_STAB))
 		{
-			c = get_symbol(s, nl->n_sect, nl->n_value,nl->n_type);
+			c = get_symbol(s, nl->n_sect, nl->n_value, nl->n_type);
 			padding(nl->n_value, c, 16);
 			ft_putchar(' ');
 			ft_putchar(c);
@@ -56,8 +56,7 @@ void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
 void		nm_64(char *fname, unsigned char *addr)
 {
 	t_structs64			ts;
-	char				*names;
-	int				i;
+	int					i;
 
 	ts.shead = NULL;
 	ts.header = (struct mach_header_64 *)addr;
@@ -75,13 +74,11 @@ void		nm_64(char *fname, unsigned char *addr)
 			sect_64(&ts.shead, ts.seg, ts.seg->nsects);
 		}
 		i++;
-		ts.load = (struct load_command*) ((char*)ts.load +
-						  ts.load->cmdsize);
+		ts.load = (struct load_command*)((char*)ts.load +
+				ts.load->cmdsize);
 	}
 	ts.symtab = (struct nlist_64 *)((char *)addr + ts.sym->symoff);
-	i = 0;
-	names = (char *)addr + ts.sym->stroff;
-	print_64(ts.shead, ts.symtab, names, ts.sym->nsyms);
+	print_64(ts.shead, ts.symtab, (char *)addr + ts.sym->stroff, ts.sym->nsyms);
 }
 
 void		nm(char *fn, unsigned char *addr, int size)

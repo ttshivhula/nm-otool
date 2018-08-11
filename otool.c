@@ -6,32 +6,11 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:39:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:29:52 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 11:11:13 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
-
-void		print_first_part(unsigned long long addr, int start, int bits)
-{
-	char	*str;
-	int	len;
-	int	i;
-
-	if (!start)
-		write(1, "\n", 1);
-	str = ft_itoa_base(addr, bits);
-	len = ft_strlen(str);
-	i = 0;
-	while (i < bits - len)
-	{
-		write(1, "0", 1);
-		i++;
-	}
-	write(1, str, len);
-	(str) ? free(str) : 0;
-	write(1, "\t", 1);
-}
 
 void		print_other_hex(unsigned long long addr, int zero, int bits)
 {
@@ -45,21 +24,19 @@ void		print_other_hex(unsigned long long addr, int zero, int bits)
 	write(1, " ", 1);
 }
 
-void		print_section(size_t addr, size_t size, unsigned char *file,
-			      int bits)
+void		print_section(size_t addr, size_t size, unsigned char *content,
+		int bits)
 {
-	size_t		i;
-	size_t		val;
-	unsigned char	*content;
-	int		is_16;
+	size_t				i;
+	size_t				val;
+	int					is_16;
 
 	val = addr;
 	is_16 = 0;
-	content = file;
 	write(1, "Contents of (__TEXT,__text) section\n", 37);
 	print_first_part(val, 1, bits);
-	i = 0;
-	while (i < size)
+	i = -1;
+	while (++i < size)
 	{
 		if (is_16 % 16 == 0 && is_16 != 0)
 		{
@@ -72,16 +49,14 @@ void		print_section(size_t addr, size_t size, unsigned char *file,
 			write(1, "00 ", 3);
 		else
 			print_other_hex(content[i], 0, bits);
-		i++;
 		val++;
 		is_16++;
 	}
-	ft_putchar('\n');
 }
 
 void		otool_64(char *fn, unsigned char *content)
 {
-	unsigned char	*file;
+	unsigned char		*file;
 	struct section_64	*sect;
 
 	if (fn)
@@ -99,10 +74,8 @@ void		otool_64(char *fn, unsigned char *content)
 		}
 		file++;
 	}
-	size_t	start_addr = sect->addr;
-	size_t	size = sect->size;
-	size_t	start = sect->offset;
-	print_section(start_addr, size, content + start, 16);
+	print_section(sect->addr, sect->size, content + sect->offset, 16);
+	ft_putchar('\n');
 }
 
 void		otool_32(char *fn, unsigned char *content)
@@ -125,10 +98,8 @@ void		otool_32(char *fn, unsigned char *content)
 		}
 		file++;
 	}
-	size_t	start_addr = sect->addr;
-	size_t	size = sect->size;
-	size_t	start = sect->offset;
-	print_section(start_addr, size, content + start, 8);
+	print_section(sect->addr, sect->size, content + sect->offset, 16);
+	ft_putchar('\n');
 }
 
 void		otool(char *fn, unsigned char *addr, int size)

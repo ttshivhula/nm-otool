@@ -6,16 +6,16 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:18:12 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 09:23:55 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:40:49 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
 
-
 char	sect_char(char *sect, char *seg, int n_type)
 {
 	char	c;
+
 	if (!strcmp(sect, "__text"))
 		c = 't';
 	else if (!strcmp(sect, "__bss"))
@@ -84,11 +84,11 @@ char	more_symbols(int addr, uint32_t type)
 	return (ret);
 }
 
-char	get_symbol(t_sections * head, int index, int addr,int n_type)
+char	get_symbol(t_sections *head, int index, int addr, int n_type)
 {
-	t_sections	*current;
-	char		c;
-	int		i;
+	t_sections		*current;
+	char			c;
+	int				i;
 
 	i = 1;
 	current = head;

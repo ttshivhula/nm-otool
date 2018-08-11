@@ -6,13 +6,13 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:17:18 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:29:46 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:56:57 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
 
-void		add_objs(t_ranlibs **head, void *ptr)
+void	add_objs(t_ranlibs **head, void *ptr)
 {
 	t_ranlibs *current;
 
@@ -33,10 +33,10 @@ void		add_objs(t_ranlibs **head, void *ptr)
 	}
 }
 
-unsigned char	*ranlib_frame(void *ptr)
+void	*ranlib_frame(void *ptr)
 {
-	unsigned char *file;
-	size_t		i;
+	unsigned char	*file;
+	size_t			i;
 
 	i = 0;
 	file = (unsigned char *)ptr;
@@ -48,15 +48,15 @@ unsigned char	*ranlib_frame(void *ptr)
 			break ;
 		i++;
 	}
-	return (&file[i]);
+	return ((void *)&file[i]);
 }
 
-void		run_nm(char *fn, t_ranlibs * head, int size)
+void	run_nm(char *fn, t_ranlibs *head, int size)
 {
-	t_ranlibs	*current;
+	t_ranlibs		*current;
 	unsigned char	*tmp;
-	char		*name;
-	
+	char			*name;
+
 	current = head;
 	while (current != NULL)
 	{
@@ -72,12 +72,12 @@ void		run_nm(char *fn, t_ranlibs * head, int size)
 	}
 }
 
-void		run_otool(char *fn, t_ranlibs * head, int size)
+void	run_otool(char *fn, t_ranlibs *head, int size)
 {
-	t_ranlibs	*current;
+	t_ranlibs		*current;
 	unsigned char	*tmp;
-	char		*name;
-	
+	char			*name;
+
 	current = head;
 	while (current != NULL)
 	{
@@ -90,10 +90,11 @@ void		run_otool(char *fn, t_ranlibs * head, int size)
 		current = current->next;
 	}
 }
-void		add_ranlib(char *fn, unsigned char *ptr, int size, int prog)
+
+void	add_ranlib(char *fn, unsigned char *ptr, int size, int prog)
 {
 	t_ranlibs	*head;
-	int		i;
+	int			i;
 
 	i = 0;
 	head = NULL;

@@ -6,16 +6,16 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:27:57 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 09:23:44 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:42:07 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
 
-int		map_file(char *filename, unsigned char **content,
-			 size_t *size)
+int			map_file(char *filename, unsigned char **content,
+		size_t *size)
 {
-	int		fd;
+	int			fd;
 	struct stat	info;
 
 	fd = open(filename, O_RDONLY);
@@ -33,10 +33,10 @@ int		map_file(char *filename, unsigned char **content,
 	return (0);
 }
 
-int		part_type(unsigned char *addr)
+int			art_type(unsigned char *addr)
 {
 	struct mach_header_64	*h64;
-	struct mach_header	*h32;
+	struct mach_header		*h32;
 
 	if (!ft_strncmp((char *)addr, ARMAG, SARMAG))
 		return (1);
