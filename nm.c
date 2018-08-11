@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:31:11 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 16:37:43 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 09:58:18 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
 		symname = &names[nl->n_un.n_strx];
 		if (!(nl->n_type & N_STAB))
 		{
-			c = get_symbol(s, nl->n_sect, nl->n_type);
+			c = get_symbol(s, nl->n_sect, nl->n_value,nl->n_type);
 			padding(nl->n_value, c, 16);
 			ft_putchar(' ');
 			ft_putchar(c);
@@ -55,36 +55,33 @@ void		print_64(t_sections *s, struct nlist_64 *symtab, char *names,
 
 void		nm_64(char *fname, unsigned char *addr)
 {
-	struct mach_header_64		*header;
-	struct load_command		*load;
-	struct symtab_command		*sym;
-	struct segment_command_64	*seg = NULL;
-	struct nlist_64			*symtab;
-	t_sections			*shead = NULL;
+	t_structs64			ts;
 	char				*names;
 	int				i;
 
-	header = (struct mach_header_64 *)addr;
-	load = (struct load_command *)&header[1];
+	ts.shead = NULL;
+	ts.header = (struct mach_header_64 *)addr;
+	ts.load = (struct load_command *)&ts.header[1];
 	i = 0;
-	while (i < header->ncmds)
+	while (i < ts.header->ncmds)
 	{
-		if (load->cmd == LC_SYMTAB)
+		if (ts.load->cmd == LC_SYMTAB)
 		{
-			sym = (struct symtab_command *)load;
+			ts.sym = (struct symtab_command *)ts.load;
 		}
-		if (load->cmd == LC_SEGMENT_64)
+		if (ts.load->cmd == LC_SEGMENT_64)
 		{
-			seg = (struct segment_command_64 *)load;
-			sect_64(&shead, seg, seg->nsects);
+			ts.seg = (struct segment_command_64 *)ts.load;
+			sect_64(&ts.shead, ts.seg, ts.seg->nsects);
 		}
 		i++;
-		load = (struct load_command*) ((char*)load + load->cmdsize);
+		ts.load = (struct load_command*) ((char*)ts.load +
+						  ts.load->cmdsize);
 	}
-	symtab = (struct nlist_64 *)((char *)addr + sym->symoff);
+	ts.symtab = (struct nlist_64 *)((char *)addr + ts.sym->symoff);
 	i = 0;
-	names = (char *)addr + sym->stroff;
-	print_64(shead, symtab, names, sym->nsyms);
+	names = (char *)addr + ts.sym->stroff;
+	print_64(ts.shead, ts.symtab, names, ts.sym->nsyms);
 }
 
 void		nm(char *fn, unsigned char *addr, int size)
@@ -103,21 +100,4 @@ void		nm(char *fn, unsigned char *addr, int size)
 		ft_putstr(fn);
 		ft_putendl(" The file was not recognized as a valid object file");
 	}
-}
-
-int		main(int argc, char **argv)
-{
-	int	i;
-	unsigned char	*content;
-	size_t			size;
-
-	i = 1;
-	content = NULL;
-	while (i < argc)
-	{
-		if (map_file(argv[i], &content, &size))
-			nm(argv[i], content, size);
-		i++;
-	}
-	return (0);
 }

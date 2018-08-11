@@ -6,11 +6,32 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:27:57 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 16:18:54 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 09:23:44 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
+
+int		map_file(char *filename, unsigned char **content,
+			 size_t *size)
+{
+	int		fd;
+	struct stat	info;
+
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		ft_putstr(filename);
+		ft_putendl(" No such file or directory.");
+		return (0);
+	}
+	fstat(fd, &info);
+	*size = info.st_size;
+	*content = mmap(0, *size, PROT_READ, MAP_PRIVATE, fd, 0);
+	if (*content != NULL)
+		return (1);
+	return (0);
+}
 
 int		part_type(unsigned char *addr)
 {
@@ -40,4 +61,27 @@ void		padding(long long n, int def, int bits)
 	}
 	else
 		ft_puthexa(n, bits);
+}
+
+void		add_sect(t_sections **head, char *sect, char *seg)
+{
+	t_sections *current;
+
+	current = *head;
+	if (*head == NULL)
+	{
+		*head = (t_sections *)malloc(sizeof(t_sections));
+		(*head)->sectname = sect;
+		(*head)->segname = seg;
+		(*head)->next = NULL;
+	}
+	else
+	{
+		while (current->next != NULL)
+			current = current->next;
+		current->next = (t_sections *)malloc(sizeof(t_sections));
+		current->next->sectname = sect;
+		current->next->segname = seg;
+		current->next->next = NULL;
+	}
 }

@@ -6,69 +6,24 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:18:12 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 16:27:57 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 09:23:55 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "theader.h"
 
-int		map_file(char *filename, unsigned char **content,
-			 size_t *size)
-{
-	int		fd;
-	struct stat	info;
-
-	fd = open(filename, O_RDONLY);
-	if (fd == -1)
-	{
-		ft_putstr(filename);
-		ft_putendl(" No such file or directory.");
-		return (0);
-	}
-	fstat(fd, &info);
-	*size = info.st_size;
-	*content = mmap(0, *size, PROT_READ, MAP_PRIVATE, fd, 0);
-	if (*content != NULL)
-		return (1);
-	return (0);
-}
-
-void		add_sect(t_sections **head, char *sect, char *seg)
-{
-	t_sections *current;
-
-	current = *head;
-	if (*head == NULL)
-	{
-		*head = (t_sections *)malloc(sizeof(t_sections));
-		(*head)->sectname = sect;
-		(*head)->segname = seg;
-		(*head)->next = NULL;
-	}
-	else
-	{
-		while (current->next != NULL)
-			current = current->next;
-		current->next = (t_sections *)malloc(sizeof(t_sections));
-		current->next->sectname = sect;
-		current->next->segname = seg;
-		current->next->next = NULL;
-	}
-}
 
 char	sect_char(char *sect, char *seg, int n_type)
 {
 	char	c;
-	if (!strcmp(sect, "__common") && !strcmp(seg, "__DATA"))
-		c = 's';
 	if (!strcmp(sect, "__text"))
 		c = 't';
-	if (!strcmp(sect, "__bss"))
+	else if (!strcmp(sect, "__bss"))
 		c = 'b';
-	if (!strcmp(sect, "__const"))
-		c = 's';
-	if (!strcmp(sect, "__data"))
+	else if (!strcmp(sect, "__data"))
 		c = 'd';
+	else
+		c = 's';
 	return ((n_type & N_EXT) ? c - 32 : c);
 }
 
@@ -106,14 +61,36 @@ void	ft_puthexa(long long nb, int bits)
 	}
 }
 
-char	get_symbol(t_sections * head, int index, int n_type)
+char	more_symbols(int addr, uint32_t type)
+{
+	char	ret;
+
+	ret = '?';
+	if ((type & N_TYPE) == N_UNDF)
+	{
+		if (addr)
+			ret = 'c';
+		else
+			ret = 'u';
+	}
+	else if ((type & N_TYPE) == N_ABS)
+		ret = 'a';
+	else if ((type & N_TYPE) == N_PBUD)
+		ret = 'u';
+	else if ((type & N_TYPE) == N_INDR)
+		ret = 'i';
+	if ((type & N_STAB) != 0)
+		ret = 'z';
+	return (ret);
+}
+
+char	get_symbol(t_sections * head, int index, int addr,int n_type)
 {
 	t_sections	*current;
 	char		c;
 	int		i;
 
 	i = 1;
-	c = 0;
 	current = head;
 	while (current != NULL)
 	{
@@ -125,10 +102,6 @@ char	get_symbol(t_sections * head, int index, int n_type)
 		current = current->next;
 		i++;
 	}
-	if (n_type & N_ABS)
-		c = 'a';
-	if (n_type & N_INDR)
-		c = 'i';
-	c = c ? c : 'u';
+	c = more_symbols(addr, n_type);
 	return ((n_type & N_EXT) ? c - 32 : c);
 }

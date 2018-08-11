@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 15:13:35 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/10 16:20:55 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 09:35:59 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void		print_32(t_sections *s, struct nlist *symtab, char *names,
 		symname = &names[nl->n_un.n_strx];
 		if (!(nl->n_type & N_STAB))
 		{
-			c = get_symbol(s, nl->n_sect, nl->n_type);
+			c = get_symbol(s, nl->n_sect, nl->n_value,nl->n_type);
 			padding(nl->n_value, c, 8);
 			ft_putchar(' ');
 			ft_putchar(c);
@@ -57,34 +57,31 @@ void		print_32(t_sections *s, struct nlist *symtab, char *names,
 
 void		nm_32(char *fname, unsigned char *addr)
 {
-	struct mach_header		*header;
-	struct load_command		*load;
-	struct symtab_command		*sym;
-	struct segment_command		*seg = NULL;
-	struct nlist			*symtab;
-	t_sections			*shead = NULL;
+	t_structs			ts;
 	char				*names;
 	int				i;
 
-	header = (struct mach_header *)addr;
-	load = (struct load_command *)&header[1];
+	ts.shead = NULL;
+	ts.header = (struct mach_header *)addr;
+	ts.load = (struct load_command *)&ts.header[1];
 	i = 0;
-	while (i < header->ncmds)
+	while (i < ts.header->ncmds)
 	{
-		if (load->cmd == LC_SYMTAB)
+		if (ts.load->cmd == LC_SYMTAB)
 		{
-			sym = (struct symtab_command *)load;
+			ts.sym = (struct symtab_command *)ts.load;
 		}
-		if (load->cmd == LC_SEGMENT)
+		if (ts.load->cmd == LC_SEGMENT)
 		{
-			seg = (struct segment_command *)load;
-			sect(&shead, seg, seg->nsects);
+			ts.seg = (struct segment_command *)ts.load;
+			sect(&ts.shead, ts.seg, ts.seg->nsects);
 		}
 		i++;
-		load = (struct load_command*) ((char*)load + load->cmdsize);
+		ts.load = (struct load_command*) ((char*)ts.load +
+						  ts.load->cmdsize);
 	}
-	symtab = (struct nlist *)((char *)addr + sym->symoff);
+	ts.symtab = (struct nlist *)((char *)addr + ts.sym->symoff);
 	i = 0;
-	names = (char *)addr + sym->stroff;
-	print_32(shead, symtab, names, sym->nsyms);
+	names = (char *)addr + ts.sym->stroff;
+	print_32(ts.shead, ts.symtab, names, ts.sym->nsyms);
 }
