@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:27:57 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:42:07 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 11:28:06 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			map_file(char *filename, unsigned char **content,
 	return (0);
 }
 
-int			art_type(unsigned char *addr)
+int			part_type(unsigned char *addr)
 {
 	struct mach_header_64	*h64;
 	struct mach_header		*h32;
