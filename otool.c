@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:39:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 12:46:02 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 14:46:46 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void		otool_32(char *fn, unsigned char *content)
 		}
 		file++;
 	}
-	print_section(sect->addr, sect->size, content + sect->offset, 16);
+	print_section(sect->addr, sect->size, content + sect->offset, 8);
 	ft_putchar('\n');
 }
 
