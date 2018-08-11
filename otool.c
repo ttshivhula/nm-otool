@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:39:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:17:43 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:29:52 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ void		otool_64(char *fn, unsigned char *content)
 	unsigned char	*file;
 	struct section_64	*sect;
 
+	if (fn)
+	{
+		ft_putstr(fn);
+		ft_putendl(":");
+	}
 	file = (unsigned char *)content;
 	while (42)
 	{
@@ -105,6 +110,11 @@ void		otool_32(char *fn, unsigned char *content)
 	unsigned char	*file;
 	struct section	*sect;
 
+	if (fn)
+	{
+		ft_putstr(fn);
+		ft_putendl(":");
+	}
 	file = (unsigned char *)content;
 	while (42)
 	{

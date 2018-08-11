@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:53:46 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 09:55:01 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:24:37 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,3 @@ char				*ft_itoa_base(long long n, int base)
 	}
 	return (ret);
 }
-

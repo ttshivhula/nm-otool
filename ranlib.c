@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:17:18 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:03:30 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 10:29:46 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ void		run_otool(char *fn, t_ranlibs * head, int size)
 		ft_putchar('(');
 		ft_putstr(current->ptr);
 		ft_putendl("):");
-		otool(fn, tmp, size);
+		otool(NULL, tmp, size);
 		current = current->next;
 	}
 }
