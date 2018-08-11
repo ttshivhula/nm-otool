@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:39:06 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 14:46:46 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 15:03:09 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,15 +105,17 @@ void		otool_32(char *fn, unsigned char *content)
 
 void		otool(char *fn, unsigned char *addr, int size)
 {
-	t_ranlibs *ranlibs;
+	t_ranlibs	*ranlibs;
+	int			offset;
 
+	offset = 0;
 	ranlibs = NULL;
-	if (part_type(addr) == 1)
-		add_ranlib(fn, addr, size, 0);
-	else if (part_type(addr) == 2)
-		otool_64(fn, addr);
-	else if (part_type(addr) == 3)
-		otool_32(fn, addr);
+	if (part_type(addr, size, &offset) == 1)
+		add_ranlib(fn, addr + offset, size, 0);
+	else if (part_type(addr, size, &offset) == 2)
+		otool_64(fn, addr + offset);
+	else if (part_type(addr, size, &offset) == 3)
+		otool_32(fn, addr + offset);
 	else
 	{
 		ft_putstr(fn);

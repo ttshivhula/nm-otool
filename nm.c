@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:31:11 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 12:01:06 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 15:01:01 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,15 +84,17 @@ void		nm_64(unsigned char *addr)
 
 void		nm(char *fn, unsigned char *addr, int size)
 {
-	t_ranlibs *ranlibs;
+	t_ranlibs	*ranlibs;
+	int			offset;
 
+	offset = 0;
 	ranlibs = NULL;
-	if (part_type(addr) == 1)
-		add_ranlib(fn, addr, size, 1);
-	else if (part_type(addr) == 2)
-		nm_64(addr);
-	else if (part_type(addr) == 3)
-		nm_32(addr);
+	if (part_type(addr, size, &offset) == 1)
+		add_ranlib(fn, addr + offset, size, 1);
+	else if (part_type(addr, size, &offset) == 2)
+		nm_64(addr + offset);
+	else if (part_type(addr, size, &offset) == 3)
+		nm_32(addr + offset);
 	else
 	{
 		ft_putstr(fn);
