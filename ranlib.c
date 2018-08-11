@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 11:17:18 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 10:56:57 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 11:23:14 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,5 @@ void	add_ranlib(char *fn, unsigned char *ptr, int size, int prog)
 		run_nm(fn, head, size);
 	else
 		run_otool(fn, head, size);
+	free_ranlibs(head);
 }

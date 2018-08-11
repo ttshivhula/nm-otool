@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:13:32 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 11:04:41 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 11:22:20 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,5 +77,7 @@ void							padding(long long n, int def, int bits);
 void							add_ranlib(char *fn, unsigned char *ptr,
 		int size, int prog);
 char							*ft_itoa_base(long long n, int base);
+void							free_ranlibs(t_ranlibs *ptr);
+void							free_sections(t_sections *ptr);
 
 #endif

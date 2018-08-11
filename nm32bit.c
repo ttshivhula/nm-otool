@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 15:13:35 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 11:18:22 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/11 11:24:50 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void		print_32(t_sections *s, struct nlist *symtab, char *names,
 			ft_putendl(symname);
 		}
 	}
+	free_sections(s);
 }
 
 void		nm_32(char *fname, unsigned char *addr)
