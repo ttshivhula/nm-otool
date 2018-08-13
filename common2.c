@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:27:57 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 17:51:59 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/13 08:57:06 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int			part_type(unsigned char *addr, int size, int *offset)
 		if (h64->magic == MH_MAGIC_64 || h64->magic == MH_CIGAM_64)
 			return (2);
 		if ((h32->magic == MH_MAGIC || h32->magic == MH_CIGAM) &&
-		    !*offset)
+				!*offset)
 			return (3);
 		addr++;
 	}

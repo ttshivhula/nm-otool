@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/10 14:13:32 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 14:56:44 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/13 08:59:03 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ char							get_symbol(t_sections *head, int index,
 void							nm_32(unsigned char *addr);
 void							nm(char *fn, unsigned char *addr, int size);
 void							otool(char *fn, unsigned char *addr, int size);
-int								part_type(unsigned char *addr, int size, int *offset);
+int								part_type(unsigned char *addr, int size,
+		int *offset);
 void							padding(long long n, int def, int bits);
 void							add_ranlib(char *fn, unsigned char *ptr,
 		int size, int prog);

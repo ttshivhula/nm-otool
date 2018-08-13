@@ -6,7 +6,7 @@
 /*   By: ttshivhu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/11 09:56:58 by ttshivhu          #+#    #+#             */
-/*   Updated: 2018/08/11 15:26:35 by ttshivhu         ###   ########.fr       */
+/*   Updated: 2018/08/13 08:57:42 by ttshivhu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ int		main(int argc, char **argv)
 			ft_putendl(":");
 		}
 		if (map_file(argv[i], &content, &size))
+		{
 			nm(argv[i], content, size);
+			munmap(content, size);
+		}
 		i++;
 	}
 	return (0);
